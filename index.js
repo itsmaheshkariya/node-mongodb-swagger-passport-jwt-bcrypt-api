@@ -1,17 +1,14 @@
-const express = require("express")
-const morgan = require('morgan')
-const Database = require("@replit/database")
-const app = express()
-app.use(morgan(':method :url :status'))
-const db = new Database()
-
-db.set("key", "value").then(() => {
-  
-  
-});
-
-app.get("/",async (req,res)=>{
-  res.send(await db.get("key"))
+const express = require('express');
+const morgan = require('morgan');
+const mongoose = require("mongoose")
+mongoose.connect("mongodb+srv://munnas:0000@cluster0.8ugu3.mongodb.net/munnas?retryWrites=true&w=majority",{
+  useUnifiedTopology: true,
+  useNewUrlParser:true
 })
+var db = mongoose.connection
 
-app.listen(8080)
+const app = express();
+app.use(morgan(':method :url :status'));
+app.use('/', require('./Routes/user.route'));
+
+app.listen(80);
