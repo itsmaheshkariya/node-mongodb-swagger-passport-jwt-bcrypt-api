@@ -11,4 +11,4 @@ const app = express();
 app.use(morgan(':method :url :status'));
 app.use('/', require('./Routes/user.route'));
 
-app.listen(80);
+app.listen(8080);
