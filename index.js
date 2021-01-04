@@ -1,13 +1,16 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const moment = require("moment")
+
+
 
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const pass = require('./Config/passport-config');
 pass.initPassport(passport);
-
+console.log(moment().format('MMMM Do YYYY, h:mm:ss a'))
 mongoose.connect(
 	'mongodb+srv://munnas:0000@cluster0.8ugu3.mongodb.net/mahesh?retryWrites=true&w=majority',
 	{
@@ -16,6 +19,13 @@ mongoose.connect(
 	}
 );
 var db = mongoose.connection;
+
+// db.on('error',(err)=>{
+//   console.log(err)
+// })
+// db.once('open',(result)=>{
+// console.log(result)
+// })
 
 const app = express();
 

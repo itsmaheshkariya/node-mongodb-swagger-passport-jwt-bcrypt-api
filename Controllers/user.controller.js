@@ -1,6 +1,9 @@
 const User = require('../Models/user.model');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+
+const jwt = require("jsonwebtoken");
+
 module.exports.getAll = async (req, res) => {
 	User.find({}, (err, users) => {
 		res.json(users);
@@ -28,19 +31,32 @@ module.exports.putData = async (req, res) => {
 		res.json(await User.find({}));
 	});
 };
+
+module.exports.authToken = async (req, res, next)=>{
+    const token = req.header('x-auth-token')
+    const verifiedToken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    next();
+}
+
 module.exports.deleteData = async (req, res) => {
-	User.findByIdAndDelete(req.params.id, err => {
+	User.findByIdAndRemove(req.params.id, err => {
 		res.json({ message: req.params.id+' deleted' });
 	});
 };
+module.exports.testData = async (req,res)=>res.send("ok")
+
+
 module.exports.login = (req, res, next) => {
-	passport.authenticate('local', {
+  const token = jwt.sign({ email: req.body.email }, process.env.ACCESS_TOKEN_SECRET);
+  console.log(token)
+  passport.authenticate('local', {
 		successRedirect: '/',
 		failureRedirect: '/login'
 	})(req, res, next);
 };
 
 module.exports.logout = (req, res)=>{
+   
   req.logout();
   res.redirect('/');
 }
